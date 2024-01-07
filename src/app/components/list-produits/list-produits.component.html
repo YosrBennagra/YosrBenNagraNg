@@ -1,0 +1,54 @@
+<br>
+<label>Code Recherche:</label>
+<input type="text" [(ngModel)]="rechercheCode" (input)="rechercheProducts()">
+<ol>
+  <div *ngFor="let produit of filteredProduits; let i = index">
+    <div style="border: 1px solid black; margin-bottom: 10px;" *ngIf="produit.prixUnitaire!=undefined">
+      <li [ngClass]="{'blue-text': produit.prixUnitaire <= 50}" [ngStyle]="{'font-style': produit.prixUnitaire <= 50 ? 'italic' : 'normal'}" [style.font-size.px]="produit.prixUnitaire <= 50 ? 20 : 'initial'">
+        idProduit: {{ produit.idProduit }}
+        <button [disabled]="produit.tauxTVA === 0.02" (click)="toggleTVA(produit)">Ajuster TVA</button>
+        <ul>
+          <li>Code: {{ produit.code }}</li>
+          <li>Libelle: {{ produit.libelle }}</li>
+          <li>Prix Unitaire: {{ produit.prixUnitaire }}</li>
+          <li>Taux TVA: {{ produit.tauxTVA }}</li>
+          <li *ngIf="produit.showTVA">TVA modifiée</li>
+        </ul>
+      </li>
+    </div>
+  </div>
+</ol>
+
+
+<form (ngSubmit)="addProduct()" #productForm="ngForm">
+    <div>
+      <label for="code">Code:</label>
+      <input type="text" [(ngModel)]="newProduct.code" name="code" required>
+    </div>
+    <div>
+      <label for="libelle">Libelle:</label>
+      <input type="text" [(ngModel)]="newProduct.libelle" name="libelle" required>
+    </div>
+    <div>
+      <label for="prixUnitaire">Prix Unitaire:</label>
+      <input type="number" [(ngModel)]="newProduct.prixUnitaire" name="prixUnitaire" required>
+    </div>
+    <div>
+      <label for="tauxTVA">Taux TVA:</label>
+      <input type="number" [(ngModel)]="newProduct.tauxTVA" name="tauxTVA" required>
+    </div>
+    <button type="submit" [disabled]="!productForm.valid">Add</button>
+  </form>
+  
+
+  <h1>Produit de meme lib : {{nbProduitAvecLibele}}</h1>
+  <div  *ngFor="let p of ListProductService , let i = index">
+    <b>produit : {{ p.idProduit }}</b>
+    <div>
+      <div>code : {{ p.code }}</div>
+      <div>prixUnitaire : {{ p.prixUnitaire }}</div>
+      <div>tauxTVA : {{ p.tauxTVA }}</div>
+      <div>libelle : {{ p.libelle }}</div>
+      <button (click)="calculerNbPLibelle(p.libelle)">
+        CALCULER
+      </button>
